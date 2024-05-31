@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Registro - TalentMan</title>
+
+    <!-- Custom fonts for this template-->
+    <link th:href="@{vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
+    <link
+        th:href="@{https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i}"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link th:href="@{css/sb-admin-2.min.css}" rel="stylesheet">
+
+</head>
+
+<body class="bg-gradient-primary">
+
+    <div class="container">        
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <p id="errorModel" th:text="${error}" style="display: none;"></p>
+                <div style="display: none;">
+                    <div th:insert="~{fragments/alerta :: alerta}"></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Registro TalentMan</h1>
+                            </div>
+                            <form class="user" th:object="${registro}" method="post" th:action="@{/registro}">
+                                <label for="Nombre completo"><strong>Nombre completo</strong></label>
+                                <div class="form-group row">
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <input type="text" class="form-control form-control-user" id="primerNombre"
+                                            placeholder="Primer nombre" th:field="*{primerNombre}">
+                                            <p class="text-danger small" th:if="${#fields.hasErrors('primerNombre')}" th:errors="*{primerNombre}" data-error-for="primerNombre"></p>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control form-control-user" id="segundoNombre"
+                                            placeholder="Segundo nombre" th:field="*{segundoNombre}">
+                                    </div>
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <input type="text" class="form-control form-control-user" id="primerApellido"
+                                            placeholder="Primer apellido" th:field="*{primerApellido}">
+                                            <p class="text-danger small" th:if="${#fields.hasErrors('primerApellido')}" th:errors="*{primerApellido}" data-error-for="primerApellido"></p> 
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control form-control-user" id="segundoApellido"
+                                            placeholder="Segundo apellido">
+                                    </div>
+                                </div>
+                                <hr>
+                                <label for="Fecha y lugar de nacimiento"><strong>Fecha y lugar de nacimiento</strong></label>
+                                <div class="row">
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label for="fechaNacimiento">Fecha nacimiento</label>
+                                        <input type="date" class="form-control form-control-user" id="fechaNacimiento" name="fechaNacimiento" th:field="*{fechaNacimiento}">
+                                            <p class="text-danger small" th:if="${#fields.hasErrors('fechaNacimiento')}" th:errors="*{fechaNacimiento}" data-error-for="fechaNacimiento"></p>
+                                    </div>
+
+                                    <div th:replace="~{fragments/listaPaises :: paisSelect(3, 'idPaisNacimiento')}"></div>
+
+                                    <div th:replace="~{fragments/listaPaises :: ciudadOtroPais(6, 'ciudadOtroPaisNacimiento', 'divCiudadOtroPaisNacimiento')}"></div>
+
+                                    <div th:replace="~{fragments/listaPaises :: departamentoSelect(3, 'idDepartamentoNacimiento', 'divDepartamentoNacimiento')}"></div>
+
+                                    <div th:replace="~{fragments/listaPaises :: municipioSelect(3, 'idMunicipioNacimiento', 'divMunicipioNacimiento')}"></div>
+                                </div>
+                                <hr>
+                                <label for="Información de contacto"><strong>Información personal</strong></label>
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label for="tipoDocumento" class="d-none">Tipo documento</label>
+                                        <select name="tipoDocumento" id="tipoDocumento" th:field="*{tipoDocumento}" class="form-control">
+                                            <option value="">Seleccione tipo de documento de identidad</option>
+                                            <option th:each="tipoDocumento : ${tipoDocumento}" th:value="${tipoDocumento}" th:text="${tipoDocumento}"></option>
+                                        </select>
+                                        <p class="text-danger small" th:if="${#fields.hasErrors('tipoDocumento')}" th:errors="*{tipoDocumento}" data-error-for="tipoDocumento"></p>
+
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control form-control-user" id="numeroDocumento" placeholder="Número de documento" th:field="*{numeroDocumento}">
+                                        <p class="text-danger small" th:if="${#fields.hasErrors('numeroDocumento')}" th:errors="*{numeroDocumento}" data-error-for="numeroDocumento"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-4">
+                                        <label for="genero" class="d-none">Género</label>
+                                        <select name="genero" id="genero" th:field="*{genero}" class="form-control">
+                                            <option value="">Seleccione un género</option>
+                                            <option th:each="genero : ${generos}" th:value="${genero}" th:text="${genero}"></option>
+                                        </select>
+                                        <p class="text-danger small" th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}" data-error-for="genero"></p>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input type="email" class="form-control form-control-user" id="correo" placeholder="Correo electrónico" th:field="*{correo}">
+                                        <p class="text-danger small" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}" data-error-for="correo"></p>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control form-control-user" id="telefono" placeholder="Teléfono" th:field="*{telefono}">
+                                        <p class="text-danger small" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}" data-error-for="telefono"></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <label for="Residencia"><strong>Lugar de residencia</strong></label>
+                                <div class="form-group row">
+                                    <div th:replace="~{fragments/listaPaises :: paisSelect(3, 'idPaisResidencia')}"></div>
+
+                                    <div th:replace="~{fragments/listaPaises :: ciudadOtroPais(6, 'ciudadOtroPaisResidencia', 'divCiudadOtroPaisResidencia')}"></div>
+
+                                    <div th:replace="~{fragments/listaPaises :: departamentoSelect(3, 'idDepartamentoResidencia', 'divDepartamentoResidencia')}"></div>
+
+                                    <div th:replace="~{fragments/listaPaises :: municipioSelect(3, 'idMunicipioResidencia', 'divMunicipioResidencia')}"></div>
+
+                                    <div class="col-sm-3 mb-3 mb-sm-0">
+                                        <label for="direccion">Dirección de residencia</label>
+                                        <input type="text" class="form-control form-control-user" id="direccion" placeholder="Dirección" th:field="*{direccion}">  
+                                        <p class="text-danger small" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}" data-error-for="direccion"></p>                                          
+                                    </div>
+                                </div>
+                                <hr>
+                                <label for="Inicio sesión"><strong>Información de inicio de sesión</strong></label>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input type="text" class="form-control form-control-user" id="usuario" placeholder="Nombre de usuario" th:field="*{usuario}">
+                                        <p class="text-danger small" th:if="${#fields.hasErrors('usuario')}" th:errors="*{usuario}" data-error-for="usuario"></p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="password" class="form-control form-control-user" id="contrasena" placeholder="Contraseña" th:field="*{contrasena}">
+                                        <p class="text-danger small" th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}" data-error-for="contrasena"></p>
+                                    </div>
+                                </div>
+                                <br>
+                                <button type="submit" class="btn btn-primary btn-user btn-block col-md-4" style="margin: auto;">
+                                    Crear cuenta
+                                </button>
+                            </form>
+                            <hr>
+                            <div class="text-center">
+                                <a class="" th:href="@{/login}">¿Ya tiene cuenta? Inicie sesión</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script th:src="@{vendor/jquery/jquery.min.js}"></script>
+    <script th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script th:src="@{vendor/jquery-easing/jquery.easing.min.js}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script th:src="@{js/sb-admin-2.min.js}"></script>
+
+</body>
+
+</html>
+
+<script>
+    if (!localStorage.getItem('visitedBefore')) {
+        localStorage.clear();
+        localStorage.setItem('visitedBefore', 'true');
+    }
+</script>
+
+<script th:src="@{/js/registro/registroNacimiento.js}"></script>
+<script th:src="@{/js/registro/registroResidencia.js}"></script>

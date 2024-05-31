@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" 
+    xmlns:th="http://www.thymeleaf.org" 
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/layout}"
+    >
+
+<head th:replace="~{layout/layout :: head}" >
+
+<body>
+    <div class="container-fluid" layout:fragment="page-content">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>¡Bienvenid@, <span th:text="${informacionPersonal.primerNombre}"></span>!</h1>
+                <p><b>TalentMan</b>, tu solución integral para la gestión eficiente del talento humano.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Features</h2>
+                <ul>
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/register">Register</a></li>
+                    <li><a href="/user">User</a></li>
+                    <li><a href="/admin">Admin</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

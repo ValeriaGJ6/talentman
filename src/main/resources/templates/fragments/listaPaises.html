@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <!-- Fragmento Pais -->
+    <div th:fragment="paisSelect(colSize, idPais)" class="form-group" th:classappend="'col-md-' + ${colSize}">
+        <label th:for="${idPais}">País *</label>
+        <select class="form-control" th:id="${idPais}" th:field="*{__${idPais}__}">
+            <option value="">Selecciona un país</option>
+            <option th:each="pais : ${paises}" th:value="${pais.id}" th:text="${pais.nombre}">
+            </option>
+        </select>
+        <p class="text-danger small" th:if="${#fields.hasErrors('__${idPais}__')}" th:errors="*{__${idPais}__}" data-error-for="pais"></p>
+    </div>
+
+    <!-- Fragmento ciudad en caso de que país sea diferente de Colombia -->
+    <div th:fragment="ciudadOtroPais(colSize, ciudadOtroPais, div)" class="form-group" style="display: none;" th:id="${div}" th:classappend="'col-md-' + ${colSize}">
+        <label for="ciudadOtroPais">Ciudad *</label>
+        <input type="text" class="form-control" th:id="${ciudadOtroPais}" th:field="*{__${ciudadOtroPais}__}">
+        <p class="text-danger small" th:if="${#fields.hasErrors('__${ciudadOtroPais}__')}" th:errors="*{__${ciudadOtroPais}__}" data-error-for="ciudadOtroPais"></p>
+    </div>
+
+    <!-- Fragmento Departamento -->
+    <div th:fragment="departamentoSelect(colSize, idDepartamento, div)" class="form-group" style="display: none;" th:id="${div}" th:classappend="'col-md-' + ${colSize}">
+        <label for="idDepartamento">Departamento *</label>
+        <select class="form-control" th:id="${idDepartamento}" th:field="*{__${idDepartamento}__}">
+            <option value="">Seleccione un departamento</option>
+        </select>
+        <p class="text-danger small" th:if="${#fields.hasErrors('__${idDepartamento}__')}" th:errors="*{__${idDepartamento}__}" data-error-for="departamento"></p>
+    </div>
+
+    <!-- Fragmento Municipio -->
+    <div th:fragment="municipioSelect(colSize, idMunicipio, div)" class="form-group" style="display: none;" th:id="${div}" th:classappend="'col-md-' + ${colSize}">
+        <label for="idMunicipio">Municipio *</label>
+        <select class="form-control" th:id="${idMunicipio}" th:field="*{__${idMunicipio}__}">
+        </select>
+        <p class="text-danger small" th:if="${#fields.hasErrors('municipioRequired')}" th:errors="*{municipioRequired}" data-error-for="municipioRequired"></p>
+    </div>
+
+</body>
+
+</html>

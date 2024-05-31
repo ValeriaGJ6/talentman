@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" 
+    xmlns:th="http://www.thymeleaf.org" 
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/layout}"
+    >
+<head th:replace="~{layout/layout :: head}" >
+<body>
+    <div class="container-fluid" layout:fragment="page-content">
+        <div th:insert="~{fragments/alerta :: alerta}"></div>
+        
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h4 class="m-0 font-weight-bold text-primary">Candidatos</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead style="background-color: rgb(48,84,196); color: white;">
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th>No Documento</th>
+                                <th>Estado</th>
+                                <th class="d-none d-md-table-cell col-1">Activo</th>
+                                <th class="col-1 text-center">Ver</th>
+                                <th class="col-1 text-center">Editar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="candidato : ${candidatos}">
+                                <td th:text="${candidato.primerNombre + ' ' + candidato.primerApellido}"></td>
+                                <td th:text="${candidato.correo}"></td>
+                                <td th:text="${candidato.numeroDocumento}"></td>
+                                <td class="d-none d-md-table-cell">
+                                    <span th:text="${candidato.idUsuario.Rol}"></span>
+                                </td>
+                                <td class="d-none d-md-table-cell">
+                                    <i class="fas fa-check" th:if="${candidato.idUsuario.activo}"></i>
+                                    <i class="fas fa-times" th:unless="${candidato.idUsuario.activo}"></i>
+                                </td>
+                                <td class="col-1 text-center">
+                                    <a href="#" class="btn btn-success btn-circle btn-sm" data-toggle="modal" data-target="#verModal" th:data-id="${candidato.id}">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                                <td class="col-1 text-center">
+                                    <a href="#" class="btn btn-info btn-circle btn-sm" data-toggle="modal" data-target="#editarEstadoModal" th:data-id="${candidato.id}">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Modal para ver informacion de cada vacante -->
+            <div class="modal fade" id="verModal" tabindex="-1" role="dialog" aria-labelledby="verModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="verModalLabel">Detalles del candidato</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">   
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal para editar el estado del candidato -->
+            <div class="modal fade" id="editarEstadoModal" tabindex="-1" role="dialog" aria-labelledby="editarEstadoModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editarEstadoModalLabel">Editar estado del candidato</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form th:action="@{/guardarEstado}" method="post">
+                                <div class="form-group">
+                                    <label for="estado">Estado:</label>
+                                    <select class="form-control" id="estado" name="estado">
+                                        <option th:each="estado : ${estados}" th:value="${estado}" th:text="${estado}"></option>
+                                    </select>
+                                </div>
+                                <input type="hidden" id="id" name="id" th:value="${candidato.id}"/>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paginador -->
+            <!-- <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${vacantePage.first ? 'disabled' : ''}">
+                        <a class="page-link"
+                            th:href="@{/listaVacantes(page=${vacantePage.number}, size=${vacantePage.size})}"
+                            aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, vacantePage.totalPages-1)}"
+                        th:classappend="${pageNumber == vacantePage.number ? 'active' : ''}">
+                        <a class="page-link" th:href="@{/listaVacantes(page=${pageNumber+1}, size=${vacantePage.size})}"
+                            th:text="${pageNumber+1}"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${vacantePage.last ? 'disabled' : ''}">
+                        <a class="page-link"
+                            th:href="@{/listaVacantes(page=${vacantePage.number+2}, size=${vacantePage.size})}"
+                            aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav> -->
+        </div>
+    </div>
+</body>
+</html>
+
+
+<!-- <script>
+    $(document).ready(function () {
+        $('#verModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('id');
+            var modal = $(this);
+            $.ajax({
+                type: "GET",
+                url: "/vercandidato/" + id,
+                success: function (response) {
+                    modal.find('.modal-body').html(
+                        '<table class="table">' +
+                            '<tr><th style="width: 25%;">Nombre</th><td>' + response.nombre + '</td></tr>' +
+                            '<tr><th style="width: 25%;">Descripción</th><td>' + response.descripcion + '</td></tr>' +
+                            '<tr><th style="width: 25%;">Fecha de publicación</th><td>' + response.fechaPublicacion + '</td></tr>' +
+                            '<tr><th style="width: 25%;">País</th><td>' + response.nombrePais + '</td></tr>' +
+                            '<tr><th style="width: 25%;">Departamento</th><td>' + (response.nombreDepartamento != null ? response.nombreDepartamento : '') + '</td></tr>' +
+                            '<tr><th style="width: 25%;">Municipio</th><td>' + (response.nombreMunicipio != null ? response.nombreMunicipio : '') + '</td></tr>' +
+                            '<tr><th style="width: 25%;">Ciudad extranjero</th><td>' + (response.ciudadOtroPais != null ? response.ciudadOtroPais : '') + '</td></tr>' +
+                            '<tr><th style="width: 25%;">Modalidad</th><td>' + response.modalidad + '</td></tr>' +
+                            '<tr><th style="width: 25%;">Activo</th><td>' + (response.activo ? 'Sí' : 'No') + '</td></tr>' +
+                        '</table>'
+                    );
+                }
+            });
+        });
+    });
+</script> -->

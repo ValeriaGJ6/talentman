@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/layout}">
+
+<head th:replace="~{layout/layout :: head}">
+
+<body>
+    <div class="container-fluid" layout:fragment="page-content">
+        <p id="errorModel" th:text="${error}" style="display: none;"></p>
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Crear Vacante</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <form th:action="@{/crearVacante}" th:object="${nuevaVacante}" method="post">
+                    <div class="form-group">
+                        <label for="nombre">Nombre *</label>
+                        <input type="text" class="form-control" id="nombre" th:field="*{nombre}">
+                        <p class="text-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"
+                            data-error-for="nombre"></p>
+
+                        <div class="form-group">
+                            <label for="descripcion">Descripción *</label>
+                            <textarea class="form-control" id="descripcion" th:field="*{descripcion}"></textarea>
+                            <p class="text-danger" th:if="${#fields.hasErrors('descripcion')}"
+                                th:errors="*{descripcion}" data-error-for="descripcion"></p>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div th:replace="~{fragments/listaPaises :: paisSelect(4, 'idPais')}"></div>
+
+                            <div th:replace="~{fragments/listaPaises :: ciudadOtroPais(8, 'ciudadOtroPais', 'divCiudad')}"></div>
+
+                            <div th:replace="~{fragments/listaPaises :: departamentoSelect(4, 'idDepartamento', 'divDepartamento')}"></div>
+
+                            <div th:replace="~{fragments/listaPaises :: municipioSelect(4, 'idMunicipio', 'divMunicipio')}"></div>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>Modalidad *</label>
+                                </div>
+                                <div class="col-md-3 form-check">
+                                    <input class="form-check-input" type="radio" name="modalidad" id="modalidad1"
+                                        value="Presencial" th:field="*{modalidad}">
+                                    <label class="form-check-label" for="modalidad1">
+                                        Presencial
+                                    </label>
+                                </div>
+                                <div class="col-md-3 form-check">
+                                    <input class="form-check-input" type="radio" name="modalidad" id="modalidad2"
+                                        value="Remoto" th:field="*{modalidad}">
+                                    <label class="form-check-label" for="modalidad2">
+                                        Remoto
+                                    </label>
+                                </div>
+                                <div class="col-md-3 form-check">
+                                    <input class="form-check-input" type="radio" name="modalidad" id="modalidad3"
+                                        value="Híbrido" th:field="*{modalidad}">
+                                    <label class="form-check-label" for="modalidad3">
+                                        Híbrido
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <label for="activo">Activo *</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="activo"
+                                            th:field="*{activo}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Crear</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    
+</body>
+
+</html>
+
+<script>
+    if (!localStorage.getItem('visitedBeforeCrearVacante')) {
+        localStorage.clear();
+        localStorage.setItem('visitedBeforeCrearVacante', 'true');
+    }
+</script>
+
+<script th:src="@{/js/vacantes/crearVacante.js}"></script>
